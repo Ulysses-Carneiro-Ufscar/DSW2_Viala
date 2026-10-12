@@ -1,0 +1,28 @@
+{
+  "name": "viajala-web2",
+  "version": "1.0.0",
+  "description": "Projeto Vialá - Desenvolvimento de Software para Web 2 (UFSCar)",
+  "main": "index.html",
+  "scripts": {
+    "start": "browser-sync start --server . --files '**/*'",
+    "dev": "browser-sync start --server . --files '**/*'",
+    "tailwind-build": "npx @tailwindcss/cli -i ./tailwindInput.css -o ./tailwindOutput.css",
+    "tailwind-watch": "npx @tailwindcss/cli -i ./tailwindInput.css -o ./tailwindOutput.css --watch"
+  },
+  "keywords": [
+    "dsw2",
+    "ufscar",
+    "tailwindcss",
+    "leaflet",
+    "openstreetmap"
+  ],
+  "author": "Equipe Viajalá",
+  "license": "MIT",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.2"
+  }
+}

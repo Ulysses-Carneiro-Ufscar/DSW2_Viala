@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vialá - Rotas e Horários</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link href="tailwindOutput.css" rel="stylesheet" />
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans">
+
+  <div class="w-full max-w-[480px] md:max-w-[960px] lg:max-w-[1080px] min-h-screen mx-auto bg-white shadow-xl flex flex-col md:my-6 md:rounded-2xl md:overflow-hidden md:border md:border-slate-200">
+
+    <!-- Cabeçalho -->
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <div class="flex items-center justify-between px-5 py-3 md:px-7">
+        <a href="index.html" class="brand-logo flex items-center gap-1.5 text-slate-900 font-extrabold text-xl tracking-tight" title="Página Inicial Vialá">
+          <span class="material-icons text-sky-700 text-2xl">location_on</span>
+          <span>Vialá</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button class="btn-login text-sm font-semibold text-slate-700 px-3 py-1.5 rounded-md hover:bg-slate-100 transition-colors" type="button">Entrar</button>
+          <button class="btn-menu-icon flex items-center justify-center p-1.5 text-slate-700 hover:text-slate-900" type="button" aria-label="Menu principal">
+            <span class="material-icons">menu</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav-tabs flex gap-6 px-5 md:px-7 border-t border-transparent" aria-label="Navegação de seções">
+        <a href="index.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Passagens</a>
+        <a href="rotas.html" class="nav-tab active pb-2.5 text-sm font-bold text-sky-700 border-b-2 border-sky-700">Rotas</a>
+        <a href="minhas-viagens.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Minhas viagens</a>
+      </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-1 flex flex-col">
+
+      <!-- Resumo da Rota Pesquisada -->
+      <section class="flex items-center justify-between px-4 py-3 md:px-7 bg-white border-b border-slate-200">
+        <div class="flex items-center gap-2.5">
+          <a href="index.html" class="p-1 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-800" aria-label="Voltar para busca">
+            <span class="material-icons text-2xl">arrow_back</span>
+          </a>
+          <div>
+            <h1 class="text-sm md:text-base font-bold text-slate-900 leading-tight">São Paulo ➔ Rio de Janeiro</h1>
+            <p class="text-xs text-slate-500">24 set · qui · 1 adulto</p>
+          </div>
+        </div>
+        <a href="index.html" class="text-xs md:text-sm font-semibold text-sky-700 hover:text-sky-800 px-2 py-1">Editar busca</a>
+      </section>
+
+      <!-- Alternador de Visão (Lista / Mapa) -->
+      <input type="radio" name="rotas_view" id="view-lista" checked class="hidden" />
+      <input type="radio" name="rotas_view" id="view-mapa" class="hidden" />
+
+      <section id="rotas-toggle-bar" class="flex bg-slate-100 rounded-full p-1 mx-4 my-3 md:mx-7 border border-slate-200 flex-shrink-0" aria-label="Modo de visualização da rota">
+        <label for="view-lista" class="flex-1 flex items-center justify-center gap-1.5 text-xs md:text-sm font-semibold py-2 px-3 rounded-full text-slate-600 transition-all cursor-pointer select-none">
+          <span class="material-icons text-base">view_list</span>
+          <span>Lista de passagens</span>
+        </label>
+        <label for="view-mapa" class="flex-1 flex items-center justify-center gap-1.5 text-xs md:text-sm font-semibold py-2 px-3 rounded-full text-slate-600 transition-all cursor-pointer select-none">
+          <span class="material-icons text-base">map</span>
+          <span>Ver Rotas no Mapa</span>
+        </label>
+      </section>
+
+      <!-- Seção: Lista de Passagens -->
+      <div id="rotas-subview-lista" class="flex flex-col flex-1">
+        
+        <!-- Filtros de Modalidade -->
+        <input type="radio" name="modal_filter" id="filter-todos" checked class="hidden" />
+        <input type="radio" name="modal_filter" id="filter-onibus" class="hidden" />
+        <input type="radio" name="modal_filter" id="filter-aviao" class="hidden" />
+        <input type="radio" name="modal_filter" id="filter-caronas" class="hidden" />
+        <input type="radio" name="modal_filter" id="filter-multimodal" class="hidden" />
+
+        <section id="filter-pills-bar" class="flex gap-2 px-4 py-1.5 md:px-7 overflow-x-auto" aria-label="Filtro por transporte">
+          <label for="filter-todos" class="whitespace-nowrap px-4 py-1.5 text-xs md:text-sm font-semibold rounded-full border border-slate-200 bg-white text-slate-800 cursor-pointer select-none transition-all">
+            Todos
+          </label>
+          <label for="filter-onibus" class="whitespace-nowrap px-4 py-1.5 text-xs md:text-sm font-semibold rounded-full border border-slate-200 bg-white text-slate-800 cursor-pointer select-none transition-all">
+            Ônibus
+          </label>
+          <label for="filter-aviao" class="whitespace-nowrap px-4 py-1.5 text-xs md:text-sm font-semibold rounded-full border border-slate-200 bg-white text-slate-800 cursor-pointer select-none transition-all">
+            Avião
+          </label>
+          <label for="filter-caronas" class="whitespace-nowrap px-4 py-1.5 text-xs md:text-sm font-semibold rounded-full border border-slate-200 bg-white text-slate-800 cursor-pointer select-none transition-all">
+            Caronas
+          </label>
+          <label for="filter-multimodal" class="whitespace-nowrap px-4 py-1.5 text-xs md:text-sm font-semibold rounded-full border border-slate-200 bg-white text-slate-800 cursor-pointer select-none transition-all">
+            Multimodal
+          </label>
+        </section>
+
+        <div class="flex items-center justify-between px-4 py-2 md:px-7 text-xs text-slate-500">
+          <span>7 opções disponíveis</span>
+          <div class="flex items-center gap-1 font-semibold text-slate-800">
+            <span>Mais cedo</span>
+            <span class="material-icons text-base">keyboard_arrow_down</span>
+          </div>
+        </div>
+
+        <div id="trips-list-container" class="px-4 pb-6 md:px-7 flex flex-col gap-3">
+          
+          <article data-modal="Ônibus" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3.5">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center">
+                  <span class="material-icons text-xl">directions_bus</span>
+                </div>
+                <div class="flex flex-col">
+                  <h2 class="text-sm font-bold text-slate-900">Viação Cometa</h2>
+                  <span class="text-xs text-slate-500">Ônibus leito</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="block text-[10px] font-bold text-slate-400 tracking-wider">A PARTIR DE</span>
+                <div class="text-lg font-extrabold text-slate-900">R$ 89,90</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base font-extrabold text-slate-900">22:30</span>
+              <div class="flex-1 flex flex-col items-center gap-0.5">
+                <span class="text-[11px] font-semibold text-slate-500">6h15</span>
+                <div class="w-full h-0.5 bg-slate-200 relative flex items-center justify-between">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+              <span class="text-base font-extrabold text-slate-900">04:45</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <span class="text-xs font-semibold text-emerald-700">12 vagas restantes</span>
+              <a href="minhas-viagens.html" class="bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-colors">
+                Selecionar
+              </a>
+            </div>
+          </article>
+
+          <article data-modal="Caronas" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3.5">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                  <span class="material-icons text-xl">person</span>
+                </div>
+                <div class="flex flex-col">
+                  <h2 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                    Carona · Marcos S. <span class="text-xs font-semibold text-amber-500">4.9 ★</span>
+                  </h2>
+                  <span class="text-xs text-slate-500">Carro compartilhado</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="block text-[10px] font-bold text-slate-400 tracking-wider">A PARTIR DE</span>
+                <div class="text-lg font-extrabold text-slate-900">R$ 55,00</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base font-extrabold text-slate-900">07:15</span>
+              <div class="flex-1 flex flex-col items-center gap-0.5">
+                <span class="text-[11px] font-semibold text-slate-500">5h15</span>
+                <div class="w-full h-0.5 bg-slate-200 relative flex items-center justify-between">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+              <span class="text-base font-extrabold text-slate-900">12:30</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <span class="text-xs font-semibold text-red-600">2 vagas restantes</span>
+              <a href="minhas-viagens.html" class="bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-colors">
+                Selecionar
+              </a>
+            </div>
+          </article>
+
+          <article data-modal="Avião" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3.5">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
+                  <span class="material-icons text-xl">flight</span>
+                </div>
+                <div class="flex flex-col">
+                  <h2 class="text-sm font-bold text-slate-900">Latam LA3312</h2>
+                  <span class="text-xs text-slate-500">Voo direto (CGH ➔ SDU)</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="block text-[10px] font-bold text-slate-400 tracking-wider">A PARTIR DE</span>
+                <div class="text-lg font-extrabold text-slate-900">R$ 249,90</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base font-extrabold text-slate-900">09:40</span>
+              <div class="flex-1 flex flex-col items-center gap-0.5">
+                <span class="text-[11px] font-semibold text-slate-500">1h05</span>
+                <div class="w-full h-0.5 bg-slate-200 relative flex items-center justify-between">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+              <span class="text-base font-extrabold text-slate-900">10:45</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <span class="text-xs font-semibold text-emerald-700">6 vagas restantes</span>
+              <a href="minhas-viagens.html" class="bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-colors">
+                Selecionar
+              </a>
+            </div>
+          </article>
+
+          <article data-modal="Caronas" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3.5">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                  <span class="material-icons text-xl">person</span>
+                </div>
+                <div class="flex flex-col">
+                  <h2 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                    Carona · Beatriz M. <span class="text-xs font-semibold text-amber-500">5.0 ★</span>
+                  </h2>
+                  <span class="text-xs text-slate-500">Carro compartilhado</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="block text-[10px] font-bold text-slate-400 tracking-wider">A PARTIR DE</span>
+                <div class="text-lg font-extrabold text-slate-900">R$ 60,00</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base font-extrabold text-slate-900">14:00</span>
+              <div class="flex-1 flex flex-col items-center gap-0.5">
+                <span class="text-[11px] font-semibold text-slate-500">5h40</span>
+                <div class="w-full h-0.5 bg-slate-200 relative flex items-center justify-between">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+              <span class="text-base font-extrabold text-slate-900">19:40</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <span class="text-xs font-semibold text-red-600">1 vaga restante</span>
+              <a href="minhas-viagens.html" class="bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-colors">
+                Selecionar
+              </a>
+            </div>
+          </article>
+
+          <article data-modal="Ônibus" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3.5">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center">
+                  <span class="material-icons text-xl">directions_bus</span>
+                </div>
+                <div class="flex flex-col">
+                  <h2 class="text-sm font-bold text-slate-900">1001 Expresso</h2>
+                  <span class="text-xs text-slate-500">Leito Cama</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="block text-[10px] font-bold text-slate-400 tracking-wider">A PARTIR DE</span>
+                <div class="text-lg font-extrabold text-slate-900">R$ 110,00</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base font-extrabold text-slate-900">21:15</span>
+              <div class="flex-1 flex flex-col items-center gap-0.5">
+                <span class="text-[11px] font-semibold text-slate-500">6h30</span>
+                <div class="w-full h-0.5 bg-slate-200 relative flex items-center justify-between">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+              <span class="text-base font-extrabold text-slate-900">03:45</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <span class="text-xs font-semibold text-emerald-700">8 vagas restantes</span>
+              <a href="minhas-viagens.html" class="bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-colors">
+                Selecionar
+              </a>
+            </div>
+          </article>
+
+          <article data-modal="Multimodal" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3.5">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
+                  <span class="material-icons text-xl">alt_route</span>
+                </div>
+                <div class="flex flex-col">
+                  <h2 class="text-sm font-bold text-slate-900">Carona + Ônibus</h2>
+                  <span class="text-xs text-slate-500">Carona até Aparecida + Ônibus ao Rio</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="block text-[10px] font-bold text-slate-400 tracking-wider">A PARTIR DE</span>
+                <div class="text-lg font-extrabold text-slate-900">R$ 78,50</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base font-extrabold text-slate-900">08:30</span>
+              <div class="flex-1 flex flex-col items-center gap-0.5">
+                <span class="text-[11px] font-semibold text-slate-500">6h40</span>
+                <div class="w-full h-0.5 bg-slate-200 relative flex items-center justify-between">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+              <span class="text-base font-extrabold text-slate-900">15:10</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <span class="text-xs font-semibold text-red-600">2 vagas restantes</span>
+              <a href="minhas-viagens.html" class="bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-colors">
+                Selecionar
+              </a>
+            </div>
+          </article>
+
+          <article data-modal="Ônibus" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3.5 opacity-70">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+                  <span class="material-icons text-xl">directions_bus</span>
+                </div>
+                <div class="flex flex-col">
+                  <h2 class="text-sm font-bold text-slate-700">Viação Útil</h2>
+                  <span class="text-xs text-slate-400">Semi-leito</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="block text-[10px] font-bold text-slate-400 tracking-wider">A PARTIR DE</span>
+                <div class="text-lg font-extrabold text-slate-700">R$ 68,00</div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-base font-bold text-slate-700">23:45</span>
+              <div class="flex-1 flex flex-col items-center gap-0.5">
+                <span class="text-[11px] font-semibold text-slate-400">6h05</span>
+                <div class="w-full h-0.5 bg-slate-200 relative flex items-center justify-between">
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                </div>
+              </div>
+              <span class="text-base font-bold text-slate-700">05:50</span>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+              <span class="text-xs font-semibold text-slate-400">Esgotado</span>
+              <span class="bg-slate-100 text-slate-400 text-xs md:text-sm font-bold py-2 px-4 rounded-lg cursor-not-allowed border border-slate-200">
+                Indisponível
+              </span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- Seção: Visualização no Mapa -->
+      <div id="rotas-subview-mapa" class="flex-col flex-1 p-4 md:p-6 lg:p-7 gap-5">
+
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col gap-3.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="text-sm md:text-base font-bold text-slate-900 flex items-center gap-2">
+                <span class="material-icons text-sky-700 text-lg">map</span>
+                <span>São Paulo ➔ Rio de Janeiro</span>
+              </h3>
+            </div>
+
+            <div class="flex items-center gap-3 text-xs flex-wrap">
+              <span class="inline-flex items-center gap-1.5 font-semibold text-sky-800 bg-sky-50 px-2.5 py-1 rounded-full border border-sky-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-sky-600"></span>
+                <span>Trecho 1: Carona</span>
+              </span>
+              <span class="inline-flex items-center gap-1.5 font-semibold text-orange-800 bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
+                <span>Trecho 2: Ônibus</span>
+              </span>
+              <span class="inline-flex items-center gap-1.5 font-semibold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span>Conexão</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="relative w-full h-[360px] md:h-[420px] rounded-xl overflow-hidden border border-slate-200 shadow-inner">
+            <div id="multimodal-map" class="w-full h-full z-10"></div>
+          </div>
+        </section>
+
+        <!-- Detalhamento dos Trechos -->
+        <section class="flex flex-col gap-4">
+          
+          <!-- Trecho 1: Carona -->
+          <article class="bg-white border-2 border-sky-100 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col justify-between gap-4">
+            <div class="flex flex-col gap-3">
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+                    <span class="material-icons text-2xl">directions_car</span>
+                  </div>
+                  <div>
+                    <span class="text-[11px] font-bold text-sky-700 uppercase tracking-wider">Trecho 1 · Carona</span>
+                    <h4 class="text-sm font-bold text-slate-900">São Paulo ➔ Aparecida</h4>
+                  </div>
+                </div>
+                <span class="text-sm font-black text-sky-800 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-200">R$ 38,50</span>
+              </div>
+
+              <div class="bg-slate-50 rounded-xl p-3 flex flex-col gap-2 text-xs border border-slate-200/70">
+                <div class="flex items-start gap-2">
+                  <span class="font-extrabold text-slate-900 min-w-[42px]">08:30</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-slate-900">Terminal Rodoviário do Tietê (SP)</span>
+                    <span class="text-slate-500">Embarque na Baia de Caronas · Ponto de encontro marcado</span>
+                  </div>
+                </div>
+                <div class="border-l-2 border-sky-400 ml-5 h-5 my-0.5"></div>
+                <div class="flex items-start gap-2">
+                  <span class="font-extrabold text-slate-900 min-w-[42px]">11:15</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-slate-900">Terminal Rodoviário de Aparecida</span>
+                    <span class="text-slate-500">Desembarque principal do terminal</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-slate-700 px-1">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">MS</div>
+                  <div>
+                    <span class="font-bold">Marcos S.</span>
+                    <span class="text-amber-600 text-[11px] font-bold ml-1">★ 4.9</span>
+                  </div>
+                </div>
+                <span class="text-slate-500">Toyota Corolla · Prata</span>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center text-xs">
+              <span class="font-semibold text-red-600">2 vagas restantes</span>
+            </div>
+          </article>
+
+          <!-- Trecho 2: Ônibus -->
+          <article class="bg-white border-2 border-orange-100 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col justify-between gap-4">
+            <div class="flex flex-col gap-3">
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                    <span class="material-icons text-2xl">directions_bus</span>
+                  </div>
+                  <div>
+                    <span class="text-[11px] font-bold text-orange-600 uppercase tracking-wider">Trecho 2 · Ônibus Executivo</span>
+                    <h4 class="text-sm font-bold text-slate-900">Aparecida ➔ Rio de Janeiro</h4>
+                  </div>
+                </div>
+                <span class="text-sm font-black text-orange-800 bg-orange-50 px-2.5 py-1 rounded-lg border border-orange-200">R$ 40,00</span>
+              </div>
+
+              <div class="bg-slate-50 rounded-xl p-3 flex flex-col gap-2 text-xs border border-slate-200/70">
+                <div class="flex items-start gap-2">
+                  <span class="font-extrabold text-slate-900 min-w-[42px]">11:45</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-slate-900">Terminal Rodoviário de Aparecida</span>
+                    <span class="text-slate-500">Plataforma 3 · Viação 1001 (Conexão de 30m)</span>
+                  </div>
+                </div>
+                <div class="border-l-2 border-orange-400 ml-5 h-5 my-0.5"></div>
+                <div class="flex items-start gap-2">
+                  <span class="font-extrabold text-slate-900 min-w-[42px]">15:10</span>
+                  <div class="flex flex-col">
+                    <span class="font-bold text-slate-900">Terminal Rodoviário Novo Rio (RJ)</span>
+                    <span class="text-slate-500">Desembarque final no Rio de Janeiro</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between bg-orange-50/70 border border-orange-200 rounded-xl p-3">
+                <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <span class="material-icons text-base text-orange-600">airline_seat_recline_normal</span>
+                  <span>Assento: 14</span>
+                </span>
+                <button type="button" onclick="document.getElementById('modal-assento').showModal()" class="bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2 px-4 rounded-lg transition-colors cursor-pointer">
+                  Escolher assento
+                </button>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-100 flex items-center text-xs">
+              <span class="font-semibold text-emerald-700">8 vagas restantes</span>
+            </div>
+          </article>
+
+        </section>
+
+        <!-- Confirmação e Pagamento -->
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center">
+            <h4 class="text-base md:text-lg font-bold text-slate-900">São Paulo ➔ Rio de Janeiro</h4>
+          </div>
+
+          <div class="flex items-center gap-4 w-full md:w-auto justify-end">
+            <div class="text-right">
+              <span class="text-[11px] text-slate-400 block font-semibold uppercase">Total a pagar</span>
+              <span class="text-xl md:text-2xl font-black text-slate-900">R$ 78,50</span>
+            </div>
+            <a href="minhas-viagens.html" class="flex-1 md:flex-initial bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-3 px-6 rounded-xl transition-colors shadow-md text-center">
+              Confirmar e ir para pagamento
+            </a>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Modal de Assento -->
+      <dialog id="modal-assento" class="backdrop:bg-slate-900/60 p-5 rounded-2xl max-w-sm md:max-w-md w-full mx-auto shadow-2xl border border-slate-200">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+          <h3 class="text-sm font-bold text-slate-900">Mapa de Poltronas</h3>
+          <button type="button" onclick="document.getElementById('modal-assento').close()" class="material-icons text-slate-400 hover:text-slate-700 text-xl cursor-pointer">close</button>
+        </div>
+
+        <div class="flex items-center justify-center gap-6 text-xs py-2 bg-slate-50 rounded-lg my-3 border border-slate-200">
+          <span class="flex items-center gap-2 font-semibold text-slate-700">
+            <span class="w-3.5 h-3.5 rounded bg-emerald-500 shadow-xs"></span> Livre
+          </span>
+          <span class="flex items-center gap-2 font-semibold text-slate-500">
+            <span class="w-3.5 h-3.5 rounded bg-slate-300 shadow-xs"></span> Ocupado
+          </span>
+        </div>
+
+        <div class="flex justify-center p-2 bg-slate-50/50 rounded-xl border border-slate-100 my-2">
+          <img src="assets/Mapa_de_poltronas.png" alt="Mapa de Poltronas do Ônibus" class="max-h-[380px] md:max-h-[430px] w-auto object-contain drop-shadow-sm" />
+        </div>
+
+        <button type="button" onclick="document.getElementById('modal-assento').close()" class="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2.5 rounded-xl cursor-pointer transition-colors mt-2">
+          Confirmar Assento
+        </button>
+      </dialog>
+
+    </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    // Inicialização do Mapa Multimodal com Leaflet
+    let multimodalMap = null;
+
+    function initMultimodalMap() {
+      const mapContainer = document.getElementById('multimodal-map');
+      if (!mapContainer || typeof L === 'undefined') return;
+
+      if (!multimodalMap) {
+        multimodalMap = L.map('multimodal-map', {
+          zoomControl: true,
+          scrollWheelZoom: false
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+          maxZoom: 18
+        }).addTo(multimodalMap);
+
+        // Trecho 1: Carona (SP -> Aparecida)
+        const leg1Coords = [
+          [-23.5165, -46.6247],
+          [-23.5020, -46.5870],
+          [-23.4682, -46.5298],
+          [-23.4350, -46.4520],
+          [-23.3967, -46.3204],
+          [-23.3400, -46.1200],
+          [-23.2800, -45.9700],
+          [-23.1896, -45.8841],
+          [-23.1006, -45.7072],
+          [-23.0205, -45.5564],
+          [-22.9255, -45.4617],
+          [-22.8750, -45.3200],
+          [-22.8466, -45.2307]
+        ];
+
+        const polylineLeg1 = L.polyline(leg1Coords, {
+          color: '#0284C7',
+          weight: 6,
+          opacity: 0.95,
+          lineCap: 'round',
+          lineJoin: 'round'
+        }).addTo(multimodalMap);
+
+        polylineLeg1.bindPopup(`
+          <div style="font-family:sans-serif;font-size:12px;">
+            <b style="color:#0284C7;">Trecho 1: Carona Compartilhada</b><br/>
+            Terminal Tietê (SP) ➔ Terminal Aparecida (SP)<br/>
+            Marcos S. (Toyota Corolla)
+          </div>
+        `);
+
+        // Trecho 2: Ônibus (Aparecida -> Rio de Janeiro)
+        const leg2Coords = [
+          [-22.8466, -45.2307],
+          [-22.8139, -45.1936],
+          [-22.7336, -45.1219],
+          [-22.6900, -45.0600],
+          [-22.6644, -45.0097],
+          [-22.5800, -44.9100],
+          [-22.5364, -44.7739],
+          [-22.4950, -44.5900],
+          [-22.4697, -44.4503],
+          [-22.5442, -44.1738],
+          [-22.5232, -44.1041],
+          [-22.6288, -43.8978],
+          [-22.7200, -43.6800],
+          [-22.7533, -43.4542],
+          [-22.8100, -43.3200],
+          [-22.8800, -43.2350],
+          [-22.8996, -43.2093]
+        ];
+
+        const polylineLeg2 = L.polyline(leg2Coords, {
+          color: '#EA580C',
+          weight: 6,
+          opacity: 0.95,
+          lineCap: 'round',
+          lineJoin: 'round'
+        }).addTo(multimodalMap);
+
+        polylineLeg2.bindPopup(`
+          <div style="font-family:sans-serif;font-size:12px;">
+            <b style="color:#EA580C;">Trecho 2: Ônibus Rodoviário</b><br/>
+            Terminal Aparecida (SP) ➔ Terminal Novo Rio (RJ)<br/>
+            Viação 1001 (Executivo)
+          </div>
+        `);
+
+        // Marcadores de Paradas
+        function createCustomMarker(bg, iconText) {
+          return L.divIcon({
+            className: 'custom-osm-pin',
+            html: `
+              <div style="
+                background-color:${bg};
+                color:#ffffff;
+                width:34px;
+                height:34px;
+                border-radius:50%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                box-shadow:0 3px 8px rgba(0,0,0,0.4);
+                border:2.5px solid #ffffff;
+                cursor:pointer;
+              ">
+                <span class="material-icons" style="font-size:18px;line-height:1;">${iconText}</span>
+              </div>
+            `,
+            iconSize: [34, 34],
+            iconAnchor: [17, 17],
+            popupAnchor: [0, -18]
+          });
+        }
+
+        L.marker([-23.5165, -46.6247], { icon: createCustomMarker('#0284C7', 'directions_car') })
+          .addTo(multimodalMap)
+          .bindPopup(`
+            <div style="font-family:sans-serif;font-size:12px;">
+              <b style="color:#0284C7;">Origem da Viagem (Carona)</b><br/>
+              <b>Terminal Rodoviário do Tietê (SP)</b><br/>
+              Partida: 08:30 · Carona com Marcos S.
+            </div>
+          `);
+
+        L.marker([-22.8466, -45.2307], { icon: createCustomMarker('#EAB308', 'sync_alt') })
+          .addTo(multimodalMap)
+          .bindPopup(`
+            <div style="font-family:sans-serif;font-size:12px;">
+              <b style="color:#B45309;">Ponto de Conexão (Transbordo)</b><br/>
+              <b>Terminal Rodoviário de Aparecida</b><br/>
+              Chegada Carona: 11:15 | Partida Ônibus: 11:45 (30 min)
+            </div>
+          `);
+
+        L.marker([-22.8996, -43.2093], { icon: createCustomMarker('#EA580C', 'directions_bus') })
+          .addTo(multimodalMap)
+          .bindPopup(`
+            <div style="font-family:sans-serif;font-size:12px;">
+              <b style="color:#EA580C;">Destino Final da Viagem</b><br/>
+              <b>Terminal Rodoviário Novo Rio (RJ)</b><br/>
+              Chegada: 15:10 · Viação 1001 (Ônibus)
+            </div>
+          `);
+
+        const bounds = L.latLngBounds([...leg1Coords, ...leg2Coords]);
+        multimodalMap.fitBounds(bounds, { padding: [35, 35] });
+
+        // Traçado Real via OSRM
+        function fetchRealOSRMRoute() {
+          const osrmBase = 'https://router.project-osrm.org/route/v1/driving/';
+          const url1 = `${osrmBase}-46.6247,-23.5165;-45.2307,-22.8466?overview=full&geometries=geojson`;
+          const url2 = `${osrmBase}-45.2307,-22.8466;-43.2093,-22.8996?overview=full&geometries=geojson`;
+
+          Promise.all([
+            fetch(url1).then(res => res.json()),
+            fetch(url2).then(res => res.json())
+          ])
+          .then(([data1, data2]) => {
+            let updated = false;
+
+            if (data1 && data1.routes && data1.routes.length > 0) {
+              const realCoords1 = data1.routes[0].geometry.coordinates.map(pt => [pt[1], pt[0]]);
+              polylineLeg1.setLatLngs(realCoords1);
+              updated = true;
+            }
+
+            if (data2 && data2.routes && data2.routes.length > 0) {
+              const realCoords2 = data2.routes[0].geometry.coordinates.map(pt => [pt[1], pt[0]]);
+              polylineLeg2.setLatLngs(realCoords2);
+              updated = true;
+            }
+
+            if (updated && multimodalMap) {
+              const fullBounds = L.featureGroup([polylineLeg1, polylineLeg2]).getBounds();
+              multimodalMap.fitBounds(fullBounds, { padding: [35, 35] });
+            }
+          })
+          .catch(err => {
+            console.info('OSRM: mantendo rota padrão de contingência.', err);
+          });
+        }
+
+        fetchRealOSRMRoute();
+      }
+
+      setTimeout(() => {
+        if (multimodalMap) {
+          multimodalMap.invalidateSize();
+        }
+      }, 150);
+    }
+
+    // Alternância de Visão
+    document.getElementById('view-mapa')?.addEventListener('change', (e) => {
+      if (e.target.checked) initMultimodalMap();
+    });
+
+    if (document.getElementById('view-mapa')?.checked || window.location.hash === '#mapa') {
+      const radio = document.getElementById('view-mapa');
+      if (radio) radio.checked = true;
+      initMultimodalMap();
+    }
+  </script>
+
+</body>
+</html>
