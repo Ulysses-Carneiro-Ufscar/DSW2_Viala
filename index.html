@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vialá - Passagens, Rotas e Minhas Viagens</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="tailwindOutput.css" rel="stylesheet" />
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans">
+
+  <div class="w-full max-w-[480px] md:max-w-[960px] lg:max-w-[1080px] min-h-screen mx-auto bg-white shadow-xl flex flex-col md:my-6 md:rounded-2xl md:overflow-hidden md:border md:border-slate-200">
+
+    <!-- Cabeçalho -->
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <div class="flex items-center justify-between px-5 py-3 md:px-7">
+        <a href="index.html" class="brand-logo flex items-center gap-1.5 text-slate-900 font-extrabold text-xl tracking-tight" title="Ir para a busca">
+          <span class="material-icons text-sky-700 text-2xl">location_on</span>
+          <span>Vialá</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button class="btn-login text-sm font-semibold text-slate-700 px-3 py-1.5 rounded-md hover:bg-slate-100 transition-colors" type="button">Entrar</button>
+          <button class="btn-menu-icon flex items-center justify-center p-1.5 text-slate-700 hover:text-slate-900" type="button" aria-label="Menu principal">
+            <span class="material-icons">menu</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav-tabs flex gap-6 px-5 md:px-7 border-t border-transparent" aria-label="Navegação de seções">
+        <a href="index.html" class="nav-tab active pb-2.5 text-sm font-bold text-sky-700 border-b-2 border-sky-700">Passagens</a>
+        <a href="rotas.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Rotas</a>
+        <a href="minhas-viagens.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Minhas viagens</a>
+      </nav>
+    </header>
+
+    <!-- Tela: Passagens -->
+    <main id="screen-passagens" class="screen active flex-1 flex-col p-5 md:p-8">
+      <div class="w-full">
+        <section class="text-center mb-6 md:mb-8">
+          <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Para onde vamos?</h1>
+          <p class="text-sm md:text-base text-slate-500">Compare horários e preços em todo o Brasil.</p>
+        </section>
+
+        <!-- Formulário de Busca -->
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm flex flex-col gap-3.5" aria-label="Formulário de busca">
+          <div id="row-locations" class="relative z-30 flex flex-col md:flex-row gap-2.5 md:gap-4">
+            <div id="origin-container" class="relative flex-1">
+              <div id="box-origin" class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-sky-700 hover:bg-white focus-within:border-sky-700 focus-within:bg-white transition-all cursor-pointer">
+                <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                  <label for="input-origin" class="text-[11px] font-bold text-slate-400 tracking-wider cursor-pointer">ORIGEM</label>
+                  <input type="text" id="input-origin" name="origem"
+                         class="text-sm font-bold text-slate-900 bg-transparent outline-none w-full cursor-text"
+                         value="São Paulo (Terminal Tietê)" placeholder="Digite ou escolha a origem..." autocomplete="off" />
+                </div>
+                <button type="button" id="btn-toggle-origin-list" class="text-slate-400 hover:text-slate-600 transition-colors p-0.5 flex items-center justify-center cursor-pointer" aria-label="Abrir lista de cidades">
+                  <span id="icon-origin-arrow" class="material-icons transition-transform duration-200 pointer-events-none">keyboard_arrow_down</span>
+                </button>
+              </div>
+
+              <div id="list-origin-dropdown" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 flex flex-col gap-1 max-h-64 overflow-y-auto">
+              </div>
+            </div>
+
+            <button id="btn-swap" class="btn-swap-locations absolute right-3 top-1/2 -translate-y-1/2 md:left-1/2 md:-translate-x-1/2 w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-sky-700 shadow-sm hover:bg-sky-50 transition-all z-20 cursor-pointer" type="button" title="Inverter cidades" aria-label="Inverter cidades">
+              <span class="material-icons text-lg">swap_vert</span>
+            </button>
+
+            <div id="destination-container" class="relative flex-1">
+              <div id="box-destination" class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-sky-700 hover:bg-white focus-within:border-sky-700 focus-within:bg-white transition-all cursor-pointer">
+                <div class="flex flex-col gap-0.5 flex-1 min-w-0">
+                  <label for="input-destination" class="text-[11px] font-bold text-slate-400 tracking-wider cursor-pointer">DESTINO</label>
+                  <input type="text" id="input-destination" name="destino"
+                         class="text-sm font-bold text-slate-900 bg-transparent outline-none w-full cursor-text"
+                         value="Rio de Janeiro (Rodoviária Novo Rio)" placeholder="Digite ou escolha o destino..." autocomplete="off" />
+                </div>
+                <button type="button" id="btn-toggle-dest-list" class="text-slate-400 hover:text-slate-600 transition-colors p-0.5 flex items-center justify-center cursor-pointer" aria-label="Abrir lista de cidades">
+                  <span id="icon-dest-arrow" class="material-icons transition-transform duration-200 pointer-events-none">keyboard_arrow_down</span>
+                </button>
+              </div>
+
+              <div id="list-dest-dropdown" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl z-50 p-1.5 flex flex-col gap-1 max-h-64 overflow-y-auto">
+              </div>
+            </div>
+          </div>
+
+          <div id="row-dates-passengers" class="relative z-20 grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
+            <div id="date-container" class="relative">
+              <div id="box-date" class="relative bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:border-sky-700 hover:bg-white transition-all select-none">
+                <div class="flex items-center gap-2.5 pointer-events-none">
+                  <span class="material-icons text-slate-500">calendar_today</span>
+                  <div class="flex flex-col">
+                    <span class="text-[11px] font-bold text-slate-400">DIA</span>
+                    <span id="display-date" class="text-sm font-semibold text-slate-900">Hoje</span>
+                  </div>
+                </div>
+                <span id="icon-date-arrow" class="material-icons text-slate-400 transition-transform duration-200 pointer-events-none">keyboard_arrow_down</span>
+
+                <input type="date" id="native-date-input" name="data"
+                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+              </div>
+            </div>
+
+            <div id="passengers-container" class="relative">
+              <div id="box-passengers" class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:border-sky-700 hover:bg-white transition-all select-none">
+                <div class="flex items-center gap-2.5">
+                  <span class="material-icons text-slate-500">person</span>
+                  <div class="flex flex-col">
+                    <span class="text-[11px] font-bold text-slate-400">PASSAGEIROS</span>
+                    <span id="display-passengers" class="text-sm font-semibold text-slate-900">1 adulto</span>
+                  </div>
+                </div>
+                <span id="icon-pass-arrow" class="material-icons text-slate-400 transition-transform duration-200">keyboard_arrow_down</span>
+              </div>
+
+              <div id="menu-passengers" class="hidden absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-50 p-4 flex flex-col gap-3">
+                <div class="flex flex-col gap-2">
+                  <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div class="flex flex-col">
+                      <span class="font-bold text-slate-800 text-sm">Adultos</span>
+                      <span class="text-xs text-slate-400">12 anos ou mais</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button id="btn-sub-adults" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">-</button>
+                      <span id="num-adults" class="text-sm font-bold w-6 text-center text-slate-800">1</span>
+                      <button id="btn-add-adults" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">+</button>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div class="flex flex-col">
+                      <span class="font-bold text-slate-800 text-sm">Crianças</span>
+                      <span class="text-xs text-slate-400">2 a 11 anos</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button id="btn-sub-children" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">-</button>
+                      <span id="num-children" class="text-sm font-bold w-6 text-center text-slate-800">0</span>
+                      <button id="btn-add-children" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">+</button>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div class="flex flex-col">
+                      <span class="font-bold text-slate-800 text-sm">Bebês</span>
+                      <span class="text-xs text-slate-400">0 a 2 anos (colo)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button id="btn-sub-babies" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">-</button>
+                      <span id="num-babies" class="text-sm font-bold w-6 text-center text-slate-800">0</span>
+                      <button id="btn-add-babies" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">+</button>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div class="flex flex-col">
+                      <span class="font-bold text-slate-800 text-sm">Pets</span>
+                      <span class="text-xs text-slate-400">Cão / Gato</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button id="btn-sub-pets" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">-</button>
+                      <span id="num-pets" class="text-sm font-bold w-6 text-center text-slate-800">0</span>
+                      <button id="btn-add-pets" type="button" class="w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold text-xs shadow-sm transition-colors cursor-pointer">+</button>
+                    </div>
+                  </div>
+                </div>
+
+                <button id="btn-confirm-passengers" type="button" class="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs md:text-sm font-bold py-2.5 rounded-xl transition-colors mt-1 shadow-sm cursor-pointer">Confirmar</button>
+              </div>
+            </div>
+          </div>
+
+          <button id="btn-get-location" class="flex items-center justify-center gap-1.5 text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 py-2 px-3 rounded-lg transition-colors cursor-pointer" type="button">
+            <span class="material-icons text-base">location_on</span>
+            Preencher com minha localização atual
+          </button>
+
+          <a href="rotas.html" id="btn-search-trips" class="w-full md:max-w-sm md:mx-auto mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 px-6 rounded-full flex items-center justify-center gap-2 shadow-lg shadow-orange-600/25 transition-all text-base cursor-pointer">
+            <span class="material-icons">search</span>
+            Buscar passagens
+          </a>
+        </section>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="js/mockData.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

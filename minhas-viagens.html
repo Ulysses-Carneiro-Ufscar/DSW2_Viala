@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vialá - Minhas viagens</title>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="tailwindOutput.css" rel="stylesheet" />
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased font-sans">
+
+  <div class="w-full max-w-[480px] md:max-w-[960px] lg:max-w-[1080px] min-h-screen mx-auto bg-white shadow-xl flex flex-col md:my-6 md:rounded-2xl md:overflow-hidden md:border md:border-slate-200">
+
+    <!-- Cabeçalho -->
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-200">
+      <div class="flex items-center justify-between px-5 py-3 md:px-7">
+        <a href="index.html" class="brand-logo flex items-center gap-1.5 text-slate-900 font-extrabold text-xl tracking-tight" title="Ir para a busca">
+          <span class="material-icons text-sky-700 text-2xl">location_on</span>
+          <span>Vialá</span>
+        </a>
+        <div class="flex items-center gap-3">
+          <button class="btn-login text-sm font-semibold text-slate-700 px-3 py-1.5 rounded-md hover:bg-slate-100 transition-colors" type="button">Entrar</button>
+          <button class="btn-menu-icon flex items-center justify-center p-1.5 text-slate-700 hover:text-slate-900" type="button" aria-label="Menu principal">
+            <span class="material-icons">menu</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="nav-tabs flex gap-6 px-5 md:px-7 border-t border-transparent" aria-label="Navegação de seções">
+        <a href="index.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Passagens</a>
+        <a href="rotas.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Rotas</a>
+        <a href="minhas-viagens.html" class="nav-tab active pb-2.5 text-sm font-bold text-sky-700 border-b-2 border-sky-700">Minhas viagens</a>
+      </nav>
+    </header>
+
+    <!-- Tela: Minhas Viagens -->
+    <main id="screen-minhas-viagens" class="screen active flex-1 flex-col p-5 md:p-8">
+      <div>
+        <header class="mb-5">
+          <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Minhas viagens</h1>
+          <p class="text-sm text-slate-500">Suas passagens compradas e reservas.</p>
+        </header>
+
+        <div id="my-tickets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          
+          <article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-900">
+                <span class="material-icons text-sky-700 text-xl">directions_bus</span>
+                <span>Ônibus leito · Viação Cometa</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-md text-center">
+                <span class="block text-[9px] font-bold text-slate-400">ASSENTO</span>
+                <span class="text-sm font-extrabold text-slate-900">14</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-base font-extrabold text-slate-900">
+              <span>São Paulo</span>
+              <span class="material-icons text-sky-700 text-lg">arrow_forward</span>
+              <span>Rio de Janeiro</span>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>24 de set · 22:30</span>
+              <span class="text-sm font-extrabold text-slate-900">R$ 89,90</span>
+            </div>
+          </article>
+
+          <article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-900">
+                <span class="material-icons text-sky-700 text-xl">flight</span>
+                <span>Avião · Latam LA3312</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-md text-center">
+                <span class="block text-[9px] font-bold text-slate-400">ASSENTO</span>
+                <span class="text-sm font-extrabold text-slate-900">7C</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-base font-extrabold text-slate-900">
+              <span>Rio de Janeiro</span>
+              <span class="material-icons text-sky-700 text-lg">arrow_forward</span>
+              <span>Belo Horizonte</span>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>30 de set · 09:40</span>
+              <span class="text-sm font-extrabold text-slate-900">R$ 249,90</span>
+            </div>
+          </article>
+
+          <article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-xs md:text-sm font-semibold text-slate-900">
+                <span class="material-icons text-sky-700 text-xl">person</span>
+                <span>Carona · Marcos S.</span>
+              </div>
+              <div class="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-md text-center">
+                <span class="block text-[9px] font-bold text-slate-400">ASSENTO</span>
+                <span class="text-sm font-extrabold text-slate-900">-</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 text-base font-extrabold text-slate-900">
+              <span>São Carlos</span>
+              <span class="material-icons text-sky-700 text-lg">arrow_forward</span>
+              <span>São Paulo</span>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>2 de set · 18:20</span>
+              <span class="text-sm font-extrabold text-slate-900">R$ 35,00</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+</body>
+</html>
