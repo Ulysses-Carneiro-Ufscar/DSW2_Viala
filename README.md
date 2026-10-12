@@ -76,10 +76,6 @@ DSW2_Viala/
 
 ## Execução Local
 
-### Pré-requisitos
-- Navegador web moderno.
-- Node.js (apenas para recompilação do CSS).
-
 ### 1. Visualização
 Abra o arquivo `index.html` diretamente no navegador ou utilize um servidor estático:
 
