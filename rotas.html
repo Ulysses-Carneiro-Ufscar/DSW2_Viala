@@ -53,10 +53,10 @@
       </section>
 
       <!-- Alternador de Visão (Lista / Mapa) -->
-      <input type="radio" name="rotas_view" id="view-lista" checked class="hidden" />
-      <input type="radio" name="rotas_view" id="view-mapa" class="hidden" />
+      <input type="radio" name="rotas_view" id="view-lista" checked class="hidden peer/lista" />
+      <input type="radio" name="rotas_view" id="view-mapa" class="hidden peer/mapa" />
 
-      <section id="rotas-toggle-bar" class="flex bg-slate-100 rounded-full p-1 mx-4 my-3 md:mx-7 border border-slate-200 flex-shrink-0" aria-label="Modo de visualização da rota">
+      <section id="rotas-toggle-bar" class="flex bg-slate-100 rounded-full p-1 mx-4 my-3 md:mx-7 border border-slate-200 flex-shrink-0 peer-checked/lista:[&_label[for=view-lista]]:bg-white peer-checked/lista:[&_label[for=view-lista]]:text-slate-900 peer-checked/lista:[&_label[for=view-lista]]:shadow-sm peer-checked/mapa:[&_label[for=view-mapa]]:bg-white peer-checked/mapa:[&_label[for=view-mapa]]:text-slate-900 peer-checked/mapa:[&_label[for=view-mapa]]:shadow-sm" aria-label="Modo de visualização da rota">
         <label for="view-lista" class="flex-1 flex items-center justify-center gap-1.5 text-xs md:text-sm font-semibold py-2 px-3 rounded-full text-slate-600 transition-all cursor-pointer select-none">
           <span class="material-icons text-base">view_list</span>
           <span>Lista de passagens</span>
@@ -68,16 +68,16 @@
       </section>
 
       <!-- Seção: Lista de Passagens -->
-      <div id="rotas-subview-lista" class="flex flex-col flex-1">
+      <div id="rotas-subview-lista" class="hidden peer-checked/lista:flex flex-col flex-1">
         
         <!-- Filtros de Modalidade -->
-        <input type="radio" name="modal_filter" id="filter-todos" checked class="hidden" />
-        <input type="radio" name="modal_filter" id="filter-onibus" class="hidden" />
-        <input type="radio" name="modal_filter" id="filter-aviao" class="hidden" />
-        <input type="radio" name="modal_filter" id="filter-caronas" class="hidden" />
-        <input type="radio" name="modal_filter" id="filter-multimodal" class="hidden" />
+        <input type="radio" name="modal_filter" id="filter-todos" checked class="hidden peer/todos" />
+        <input type="radio" name="modal_filter" id="filter-onibus" class="hidden peer/onibus" />
+        <input type="radio" name="modal_filter" id="filter-aviao" class="hidden peer/aviao" />
+        <input type="radio" name="modal_filter" id="filter-caronas" class="hidden peer/caronas" />
+        <input type="radio" name="modal_filter" id="filter-multimodal" class="hidden peer/multimodal" />
 
-        <section id="filter-pills-bar" class="flex gap-2 px-4 py-1.5 md:px-7 overflow-x-auto" aria-label="Filtro por transporte">
+        <section id="filter-pills-bar" class="flex gap-2 px-4 py-1.5 md:px-7 overflow-x-auto peer-checked/todos:[&_label[for=filter-todos]]:bg-slate-900 peer-checked/todos:[&_label[for=filter-todos]]:text-white peer-checked/todos:[&_label[for=filter-todos]]:border-slate-900 peer-checked/onibus:[&_label[for=filter-onibus]]:bg-slate-900 peer-checked/onibus:[&_label[for=filter-onibus]]:text-white peer-checked/onibus:[&_label[for=filter-onibus]]:border-slate-900 peer-checked/aviao:[&_label[for=filter-aviao]]:bg-slate-900 peer-checked/aviao:[&_label[for=filter-aviao]]:text-white peer-checked/aviao:[&_label[for=filter-aviao]]:border-slate-900 peer-checked/caronas:[&_label[for=filter-caronas]]:bg-slate-900 peer-checked/caronas:[&_label[for=filter-caronas]]:text-white peer-checked/caronas:[&_label[for=filter-caronas]]:border-slate-900 peer-checked/multimodal:[&_label[for=filter-multimodal]]:bg-slate-900 peer-checked/multimodal:[&_label[for=filter-multimodal]]:text-white peer-checked/multimodal:[&_label[for=filter-multimodal]]:border-slate-900" aria-label="Filtro por transporte">
           <label for="filter-todos" class="whitespace-nowrap px-4 py-1.5 text-xs md:text-sm font-semibold rounded-full border border-slate-200 bg-white text-slate-800 cursor-pointer select-none transition-all">
             Todos
           </label>
@@ -103,7 +103,7 @@
           </div>
         </div>
 
-        <div id="trips-list-container" class="px-4 pb-6 md:px-7 flex flex-col gap-3">
+        <div id="trips-list-container" class="px-4 pb-6 md:px-7 flex flex-col gap-3 peer-checked/onibus:[&_article:not([data-modal=Ônibus])]:hidden peer-checked/aviao:[&_article:not([data-modal=Avião])]:hidden peer-checked/caronas:[&_article:not([data-modal=Caronas])]:hidden peer-checked/multimodal:[&_article:not([data-modal=Multimodal])]:hidden">
           
           <article data-modal="Ônibus" class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3.5">
             <div class="flex items-start justify-between">
@@ -372,7 +372,7 @@
       </div>
 
       <!-- Seção: Visualização no Mapa -->
-      <div id="rotas-subview-mapa" class="flex-col flex-1 p-4 md:p-6 lg:p-7 gap-5">
+      <div id="rotas-subview-mapa" class="hidden peer-checked/mapa:flex flex-col flex-1 p-4 md:p-6 lg:p-7 gap-5">
 
         <section class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm flex flex-col gap-3.5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">

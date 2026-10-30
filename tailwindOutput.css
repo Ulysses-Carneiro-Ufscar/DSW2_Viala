@@ -67,14 +67,10 @@
     --tracking-tight: -0.025em;
     --tracking-wider: 0.05em;
     --leading-tight: 1.25;
-    --radius-sm: 0.25rem;
     --radius-md: 0.375rem;
     --radius-lg: 0.5rem;
     --radius-xl: 0.75rem;
     --radius-2xl: 1rem;
-    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --drop-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.15);
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -956,6 +952,12 @@
     -webkit-user-select: none;
     user-select: none;
   }
+  .peer-checked\/lista\:flex:is(:where(.peer\/lista):checked ~ *) {
+    display: flex;
+  }
+  .peer-checked\/mapa\:flex:is(:where(.peer\/mapa):checked ~ *) {
+    display: flex;
+  }
   .backdrop\:bg-slate-900\/60::backdrop {
     background-color: color-mix(in srgb, oklch(20.8% 0.042 265.755) 60%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -1122,53 +1124,101 @@
       padding: calc(var(--spacing) * 7);
     }
   }
-}
-.nav-tab.active {
-  color: #1D72B8 !important;
-  font-weight: 700 !important;
-  border-bottom-color: #1D72B8 !important;
-}
-#view-lista:checked ~ #rotas-toggle-bar label[for="view-lista"], #view-mapa:checked ~ #rotas-toggle-bar label[for="view-mapa"] {
-  background-color: #FFFFFF;
-  color: #0F172A;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-#view-lista:checked ~ #rotas-subview-lista {
-  display: flex;
-}
-#view-lista:checked ~ #rotas-subview-mapa {
-  display: none;
-}
-#view-mapa:checked ~ #rotas-subview-lista {
-  display: none;
-}
-#view-mapa:checked ~ #rotas-subview-mapa {
-  display: flex;
-}
-#filter-todos:checked ~ #filter-pills-bar label[for="filter-todos"], #filter-onibus:checked ~ #filter-pills-bar label[for="filter-onibus"], #filter-aviao:checked ~ #filter-pills-bar label[for="filter-aviao"], #filter-caronas:checked ~ #filter-pills-bar label[for="filter-caronas"], #filter-multimodal:checked ~ #filter-pills-bar label[for="filter-multimodal"] {
-  background-color: #0F172A;
-  color: #FFFFFF;
-  border-color: #0F172A;
-}
-#filter-onibus:checked ~ #trips-list-container article:not([data-modal="Ônibus"]) {
-  display: none;
-}
-#filter-aviao:checked ~ #trips-list-container article:not([data-modal="Avião"]) {
-  display: none;
-}
-#filter-caronas:checked ~ #trips-list-container article:not([data-modal="Caronas"]) {
-  display: none;
-}
-#filter-multimodal:checked ~ #trips-list-container article:not([data-modal="Multimodal"]) {
-  display: none;
-}
-#native-date-input::-webkit-calendar-picker-indicator {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
+  .peer-checked\/aviao\:\[\&_article\:not\(\[data-modal\=Avião\]\)\]\:hidden:is(:where(.peer\/aviao):checked ~ *) article:not([data-modal=Avião]) {
+    display: none;
+  }
+  .peer-checked\/caronas\:\[\&_article\:not\(\[data-modal\=Caronas\]\)\]\:hidden:is(:where(.peer\/caronas):checked ~ *) article:not([data-modal=Caronas]) {
+    display: none;
+  }
+  .peer-checked\/multimodal\:\[\&_article\:not\(\[data-modal\=Multimodal\]\)\]\:hidden:is(:where(.peer\/multimodal):checked ~ *) article:not([data-modal=Multimodal]) {
+    display: none;
+  }
+  .peer-checked\/onibus\:\[\&_article\:not\(\[data-modal\=Ônibus\]\)\]\:hidden:is(:where(.peer\/onibus):checked ~ *) article:not([data-modal=Ônibus]) {
+    display: none;
+  }
+  .peer-checked\/aviao\:\[\&_label\[for\=filter-aviao\]\]\:border-slate-900:is(:where(.peer\/aviao):checked ~ *) label[for=filter-aviao] {
+    border-color: var(--color-slate-900);
+  }
+  .peer-checked\/aviao\:\[\&_label\[for\=filter-aviao\]\]\:bg-slate-900:is(:where(.peer\/aviao):checked ~ *) label[for=filter-aviao] {
+    background-color: var(--color-slate-900);
+  }
+  .peer-checked\/aviao\:\[\&_label\[for\=filter-aviao\]\]\:text-white:is(:where(.peer\/aviao):checked ~ *) label[for=filter-aviao] {
+    color: var(--color-white);
+  }
+  .peer-checked\/caronas\:\[\&_label\[for\=filter-caronas\]\]\:border-slate-900:is(:where(.peer\/caronas):checked ~ *) label[for=filter-caronas] {
+    border-color: var(--color-slate-900);
+  }
+  .peer-checked\/caronas\:\[\&_label\[for\=filter-caronas\]\]\:bg-slate-900:is(:where(.peer\/caronas):checked ~ *) label[for=filter-caronas] {
+    background-color: var(--color-slate-900);
+  }
+  .peer-checked\/caronas\:\[\&_label\[for\=filter-caronas\]\]\:text-white:is(:where(.peer\/caronas):checked ~ *) label[for=filter-caronas] {
+    color: var(--color-white);
+  }
+  .peer-checked\/multimodal\:\[\&_label\[for\=filter-multimodal\]\]\:border-slate-900:is(:where(.peer\/multimodal):checked ~ *) label[for=filter-multimodal] {
+    border-color: var(--color-slate-900);
+  }
+  .peer-checked\/multimodal\:\[\&_label\[for\=filter-multimodal\]\]\:bg-slate-900:is(:where(.peer\/multimodal):checked ~ *) label[for=filter-multimodal] {
+    background-color: var(--color-slate-900);
+  }
+  .peer-checked\/multimodal\:\[\&_label\[for\=filter-multimodal\]\]\:text-white:is(:where(.peer\/multimodal):checked ~ *) label[for=filter-multimodal] {
+    color: var(--color-white);
+  }
+  .peer-checked\/onibus\:\[\&_label\[for\=filter-onibus\]\]\:border-slate-900:is(:where(.peer\/onibus):checked ~ *) label[for=filter-onibus] {
+    border-color: var(--color-slate-900);
+  }
+  .peer-checked\/onibus\:\[\&_label\[for\=filter-onibus\]\]\:bg-slate-900:is(:where(.peer\/onibus):checked ~ *) label[for=filter-onibus] {
+    background-color: var(--color-slate-900);
+  }
+  .peer-checked\/onibus\:\[\&_label\[for\=filter-onibus\]\]\:text-white:is(:where(.peer\/onibus):checked ~ *) label[for=filter-onibus] {
+    color: var(--color-white);
+  }
+  .peer-checked\/todos\:\[\&_label\[for\=filter-todos\]\]\:border-slate-900:is(:where(.peer\/todos):checked ~ *) label[for=filter-todos] {
+    border-color: var(--color-slate-900);
+  }
+  .peer-checked\/todos\:\[\&_label\[for\=filter-todos\]\]\:bg-slate-900:is(:where(.peer\/todos):checked ~ *) label[for=filter-todos] {
+    background-color: var(--color-slate-900);
+  }
+  .peer-checked\/todos\:\[\&_label\[for\=filter-todos\]\]\:text-white:is(:where(.peer\/todos):checked ~ *) label[for=filter-todos] {
+    color: var(--color-white);
+  }
+  .peer-checked\/lista\:\[\&_label\[for\=view-lista\]\]\:bg-white:is(:where(.peer\/lista):checked ~ *) label[for=view-lista] {
+    background-color: var(--color-white);
+  }
+  .peer-checked\/lista\:\[\&_label\[for\=view-lista\]\]\:text-slate-900:is(:where(.peer\/lista):checked ~ *) label[for=view-lista] {
+    color: var(--color-slate-900);
+  }
+  .peer-checked\/lista\:\[\&_label\[for\=view-lista\]\]\:shadow-sm:is(:where(.peer\/lista):checked ~ *) label[for=view-lista] {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .peer-checked\/mapa\:\[\&_label\[for\=view-mapa\]\]\:bg-white:is(:where(.peer\/mapa):checked ~ *) label[for=view-mapa] {
+    background-color: var(--color-white);
+  }
+  .peer-checked\/mapa\:\[\&_label\[for\=view-mapa\]\]\:text-slate-900:is(:where(.peer\/mapa):checked ~ *) label[for=view-mapa] {
+    color: var(--color-slate-900);
+  }
+  .peer-checked\/mapa\:\[\&_label\[for\=view-mapa\]\]\:shadow-sm:is(:where(.peer\/mapa):checked ~ *) label[for=view-mapa] {
+    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:absolute::-webkit-calendar-picker-indicator {
+    position: absolute;
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:inset-0::-webkit-calendar-picker-indicator {
+    inset: 0px;
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:h-full::-webkit-calendar-picker-indicator {
+    height: 100%;
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:w-full::-webkit-calendar-picker-indicator {
+    width: 100%;
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:cursor-pointer::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:opacity-0::-webkit-calendar-picker-indicator {
+    opacity: 0%;
+  }
 }
 @property --tw-translate-x {
   syntax: "*";
