@@ -96,7 +96,7 @@ function setupCityDropdown(inputId, dropdownId, arrowId, boxId, btnToggleId, sta
     filtered.forEach(cidade => {
       const itemBtn = document.createElement('button');
       itemBtn.type = 'button';
-      itemBtn.className = 'w-full text-left px-3 py-2.5 rounded-lg text-xs md:text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:text-sky-700 transition-colors cursor-pointer truncate';
+      itemBtn.className = 'w-full text-left px-3 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-sky-50 hover:text-sky-700 transition-colors cursor-pointer truncate';
       itemBtn.textContent = cidade;
 
       itemBtn.addEventListener('click', (e) => {
