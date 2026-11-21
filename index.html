@@ -10,11 +10,11 @@
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased font-sans">
 
-  <div class="w-[1080px] min-h-[720px] mx-auto my-6 bg-white shadow-xl flex flex-col rounded-2xl overflow-hidden border border-slate-200">
+  <div class="w-full min-h-screen mx-auto bg-white shadow-xl flex flex-col md:w-[720px] md:min-h-[720px] md:my-6 md:rounded-2xl md:overflow-hidden md:border md:border-slate-200 lg:w-[960px]">
 
     <!-- Cabeçalho -->
     <header class="sticky top-0 z-50 bg-white border-b border-slate-200">
-      <div class="flex items-center justify-between py-3 px-7">
+      <div class="flex items-center justify-between py-3 px-4 md:px-7">
         <a href="index.html" class="brand-logo flex items-center gap-1.5 text-slate-900 font-extrabold text-xl tracking-tight" title="Ir para a busca">
           <span class="material-icons text-sky-700 text-2xl">location_on</span>
           <span>Vialá</span>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <nav class="nav-tabs flex gap-6 px-7 border-t border-transparent" aria-label="Navegação de seções">
+      <nav class="nav-tabs flex gap-4 px-4 border-t border-transparent md:gap-6 md:px-7" aria-label="Navegação de seções">
         <a href="index.html" class="nav-tab active pb-2.5 text-sm font-bold text-sky-700 border-b-2 border-sky-700">Passagens</a>
         <a href="rotas.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Rotas</a>
         <a href="minhas-viagens.html" class="nav-tab pb-2.5 text-sm font-medium text-slate-500 border-b-2 border-transparent hover:text-slate-900">Minhas viagens</a>
@@ -35,16 +35,16 @@
     </header>
 
     <!-- Tela: Passagens -->
-    <main id="screen-passagens" class="screen active flex-1 flex-col p-8">
+    <main id="screen-passagens" class="screen active flex-1 flex-col p-4 lg:p-8">
       <div class="w-full">
-        <section class="text-center mb-8">
-          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Para onde vamos?</h1>
-          <p class="text-base text-slate-500">Compare horários e preços em todo o Brasil.</p>
+        <section class="text-center mb-6 md:mb-8">
+          <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight mb-1">Para onde vamos?</h1>
+          <p class="text-sm md:text-base text-slate-500">Compare horários e preços em todo o Brasil.</p>
         </section>
 
         <!-- Formulário de Busca -->
-        <section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col gap-3.5" aria-label="Formulário de busca">
-          <div id="row-locations" class="relative z-30 flex flex-row items-center gap-4">
+        <section class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col gap-3.5 lg:p-6" aria-label="Formulário de busca">
+          <div id="row-locations" class="relative z-30 flex flex-col items-stretch gap-2.5 md:flex-row md:items-center md:gap-2 lg:gap-4">
             <div id="origin-container" class="relative flex-1">
               <div id="box-origin" class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between hover:border-sky-700 hover:bg-white focus-within:border-sky-700 focus-within:bg-white transition-all cursor-pointer">
                 <div class="flex flex-col gap-0.5 flex-1 min-w-0">
@@ -62,7 +62,7 @@
               </div>
             </div>
 
-            <button id="btn-swap" class="btn-swap-locations w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-sky-700 shadow-sm hover:bg-sky-50 transition-all z-20 cursor-pointer" type="button" title="Inverter cidades" aria-label="Inverter cidades">
+            <button id="btn-swap" class="btn-swap-locations self-center w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-sky-700 shadow-sm hover:bg-sky-50 transition-all z-20 cursor-pointer md:flex-none" type="button" title="Inverter cidades" aria-label="Inverter cidades">
               <span class="material-icons text-lg">swap_horiz</span>
             </button>
 
@@ -84,7 +84,7 @@
             </div>
           </div>
 
-          <div id="row-dates-passengers" class="relative z-20 grid grid-cols-2 gap-4">
+          <div id="row-dates-passengers" class="relative z-20 grid grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-4">
             <div id="date-container" class="relative">
               <div id="box-date" class="relative bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between cursor-pointer hover:border-sky-700 hover:bg-white transition-all select-none">
                 <div class="flex items-center gap-2.5 pointer-events-none">
@@ -174,7 +174,7 @@
             Preencher com minha localização atual
           </button>
 
-          <a href="rotas.html" id="btn-search-trips" class="w-full max-w-sm mx-auto mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 px-6 rounded-full flex items-center justify-center gap-2 shadow-lg shadow-orange-600/25 transition-all text-base cursor-pointer">
+          <a href="rotas.html" id="btn-search-trips" class="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 px-6 rounded-full flex items-center justify-center gap-2 shadow-lg shadow-orange-600/25 transition-all text-base cursor-pointer md:max-w-sm md:mx-auto">
             <span class="material-icons">search</span>
             Buscar passagens
           </a>
